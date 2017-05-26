@@ -1,0 +1,98 @@
+### TO DO ####
+
+df_rows = [Row(a='foo', b='one', c='small', d=1,e=2,f=0),\
+           Row(a='foo', b='one', c='large', d=9,e=3,f=1),\
+           Row(a='foo', b='one', c='large', d=2,e=10,f=1),\
+           Row(a='foo', b='two', c='small', d=3,e=21,f=0),\
+           Row(a='foo', b='two', c='small', d=3,e=3,f=1),\
+           Row(a='bar', b='one', c='large', d=4,e=2,f=0),\
+           Row(a='bar', b='one', c='small', d=5,e=1,f=1),\
+           Row(a='bar', b='two', c='small', d=6,e=2,f=1),\
+           Row(a='bar', b='two', c='large', d=7,e=None,f=0),\
+          ]
+
+df.show()
++---+---+-----+---+----+---+
+|  a|  b|    c|  d|   e|  f|
++---+---+-----+---+----+---+
+|foo|one|small|  1|   2|  0|
+|foo|one|large|  9|   3|  1|
+|foo|one|large|  2|  10|  1|
+|foo|two|small|  3|  21|  0|
+|foo|two|small|  3|   3|  1|
+|bar|one|large|  4|   2|  0|
+|bar|one|small|  5|   1|  1|
+|bar|two|small|  6|   2|  1|
+|bar|two|large|  7|null|  0|
++---+---+-----+---+----+---+
+
+#### groupby ######
+1.
+Pour maille a,b je veux la moyenne sur d.
+
+
+2.
+Pour maille a,b je veux la variance sur d.
+
+
+3.
+Pour maille a,b je veux le min, max, std, ...;
+
+
+4.
+Faire les n opérations précédentes "en même temps"
+aggregate(df, key, *args):
+    """
+    Function that aggregates spark dataframe to the chosen key and apply a set of spark functions to the aggregate
+    parameters:
+        df: spark dataframe
+        key: list of df columns that are used for aggregating the dataframe
+        *args: must be combination of aggregate spark functions (max, min, avg, sum, count) of the form: 
+        F.sum('col_name')+F.avg('col_name'), F.max('col_name')
+    return:
+        df: the aggregated spark dataframe
+    """
+example:
+input: 
+df
++---+---+-----+---+----+---+
+|  a|  b|    c|  d|   e|  f|
++---+---+-----+---+----+---+
+|foo|one|small|  1|   2|  0|
+|foo|one|large|  9|   3|  1|
+|foo|one|large|  2|  10|  1|
+|foo|two|small|  3|  21|  0|
+|foo|two|small|  3|   3|  1|
+|bar|one|large|  4|   2|  0|
+|bar|one|small|  5|   1|  1|
+|bar|two|small|  6|   2|  1|
+|bar|two|large|  7|null|  0|
++---+---+-----+---+----+---+
+
+output:
+reduce_line(df, ['a','b'], F.mean('e'),F.sum('e'), F.max('e'), F.sum('d'))
+
++---+---+------+------+------+------+
+|  a|  b|avg(e)|sum(e)|max(e)|sum(d)|
++---+---+------+------+------+------+
+|foo|one|   5.0|    15|    10|    12|
+|foo|two|  12.0|    24|    21|     6|
+|bar|two|   2.0|     2|     2|    13|
+|bar|one|   1.5|     3|     2|     9|
++---+---+------+------+------+------+
+
+5.
+Nombre de modalités sur une variable catégoriel (c)
+
+
+6.
+Présence ou absence d'une modalité d'intérêt (c)
+
+
+###### pivot #####
+7.
+Même traitement que précédemment pour chaque modalité d'une variable catégorielle
+
+
+8.
+Etendre à un nombre quelconques de variables catégorielles
