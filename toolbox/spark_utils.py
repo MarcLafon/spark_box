@@ -58,10 +58,7 @@ def sparkConnect(nb_cores,nb_memory,name,cluster=True,*args,**kwargs):
     conf.set("spark.kryoserializer.buffer.max"    , "1024m")
     conf.set("spark.driver.maxResultSize"         , "4g")
     if cluster:
-        conf.set("spark.master","mesos://master.mesos-prod:5050")
-#        conf.set('spark.mesos.executor.docker.image'  ,"8DD2.quinten-grid.local:5000/spark-executor:2.0.1")
-#        conf.set('spark.mesos.executor.docker.volumes',"/mnt/apps/python:/mnt/python")
-#        conf.set("spark.mesos.coarse", "True")
+        conf.set("spark.mesos.coarse", "True")
     else:
         conf.set("spark.master","local[%s]"%nb_cores)
 
