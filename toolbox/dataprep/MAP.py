@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Apr 24 17:58:14 2017
-
-@author: vmasdeu
-"""
 from pyspark.sql import functions as F
 
 __all__ = ['aggregate','dummify']
